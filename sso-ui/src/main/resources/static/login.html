@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>login</title>
+</head>
+<body>
+<div class="container"id="app">
+    <h3>Please Login</h3>
+    <form>
+        <div class="mb-3">
+            <label for="usernameId" class="form-label">Username</label>
+            <input type="text" v-model="username" class="form-control" id="usernameId" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="passwordId" class="form-label">Password</label>
+            <input type="password" v-model="password" class="form-control" id="passwordId">
+        </div>
+        <button type="button" @click="doLogin()" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var vm=new Vue({
+        el:"#app",//定义监控点，vue底层会基于此监控点在内存中构建dom树
+        data:{ //此对象中定义页面上要操作的数据
+            username:"",
+            password:""
+        },
+        methods: {//此位置定义所有业务事件处理函数
+            doLogin() {
+                //1.定义url
+                let url = "http://localhost:9000/sso/oauth/token"
+                //2.定义参数
+                let params = new URLSearchParams()
+                params.append('username',this.username);
+                params.append('password',this.password);
+                params.append('client_id',"gateway-client");
+                params.append('client_secret',"123456");
+                params.append('grant_type',"password");
+                //3.发送异步请求
+                axios.post(url, params)
+                    .then((response) => {//ok
+                        alert("login ok")
+                        let result=response.data;
+                        console.log("result",result);
+                        //将返回的访问令牌存储到浏览器本地对象中
+                        localStorage.setItem("accessToken",result.access_token);
+                        location.href="/resource.html";
+                        //启动一个定时器,一个小时以后,向认证中心发送刷新令牌
+                    })
+                    .catch((e)=>{
+                        console.log(e);
+                    })
+            }
+        }
+    });
+</script>
+</body>
+</html>

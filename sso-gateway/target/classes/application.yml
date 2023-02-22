@@ -1,0 +1,37 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: sso-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.108.125.165:8848
+      config:
+        server-addr: 39.108.125.165:8848
+        file-extension: yml
+    sentinel:
+      transport:
+        dashboard: localhost:8180
+      eager: true
+    gateway:
+      routes:
+      - id: router01
+        uri: lb://sso-resource
+        predicates:
+        - Path=/sso/resource/**
+        filters:
+        - StripPrefix=1
+      - id: router02
+        uri: lb://sso-auth
+        predicates:
+        - Path=/sso/oauth/**
+        filters:
+        - StripPrefix=1
+      globalcors: #跨域配置(写到配置文件的好处是可以将其配置写到配置中心)
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+            allowCredentials: true

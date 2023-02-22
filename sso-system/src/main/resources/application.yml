@@ -1,0 +1,20 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: sso-system
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.108.125.165:8848
+      config:
+        server-addr: 39.108.125.165:8848
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://39.108.125.165:3306/sso?useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志

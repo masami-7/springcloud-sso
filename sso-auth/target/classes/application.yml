@@ -1,0 +1,11 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: sso-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.108.125.165:8848
+      config:
+        server-addr: 39.108.125.165:8848

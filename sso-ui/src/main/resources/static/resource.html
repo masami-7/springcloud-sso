@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <h1>The Resource Page</h1>
+    <button onclick="doSelect()">查询我的资源</button>
+    <button onclick="doUpdate()">修改我的资源</button>
+</div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    function doSelect() {
+        let url = "http://localhost:9000/sso/resource";
+        //获取登录后,存储到浏览器客户端的访问令牌
+        let token = localStorage.getItem("accessToken");
+        //发送请求时,携带访问令牌
+        axios.get(url, {headers: {"Authorization": "Bearer " + token}})
+            .then(function (response) {
+                alert("select ok")
+                console.log(response.data);
+            })
+            .catch(function (e) {//失败时执行catch代码块
+                if (e.response.status == 401) {
+                    alert("请先登录");
+                    location.href = "/login.html";
+                } else if (e.response.status == 403) {
+                    alert("您没有权限")
+                }
+                console.log("error", e);
+            })
+    }
+
+    function doUpdate() {
+        let url = "http://localhost:9000/sso/resource";
+        //获取登录后,存储到浏览器客户端的访问令牌
+        let token = localStorage.getItem("accessToken");
+        console.log("token", token);
+        //发送请求时,携带访问令牌
+        axios.put(url, "", {headers: {"Authorization": "Bearer " + token}})
+            .then(function (response) {
+                alert("update ok")
+                console.log(response.data);
+            })
+            .catch(function (e) {//失败时执行catch代码块
+                console.log(e);
+                if (e.response.status == 401) {
+                    alert("请先登录");
+                    location.href = "/login.html";
+                } else if (e.response.status == 403) {
+                    alert("您没有权限")
+                }
+                console.log("error", e);
+            })
+    }
+</script>
+</body>
+</html>

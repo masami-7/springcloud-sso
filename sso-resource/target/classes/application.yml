@@ -1,0 +1,12 @@
+server:
+  port: 10000
+spring:
+  application:
+    name: sso-resource
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.108.125.165:8848
+      config:
+        server-addr: 39.108.125.165:8848
+        file-extension: yml
